@@ -8,41 +8,55 @@ class App extends React.Component {
         super();
 
         this.state = {
-            todos: [
-                {
-                    name: 'Organize Garage',
-                    id: 1528817077286,
-                    completed: false
-                },
-                {
-                    name: 'Take Out Trash',
-                    id: 1528317077286,
-                    completed: true
-                }
-            ]
+            todos: []
         };
     }
 
+    componentDidMount() {
+        const savedTodosExist = localStorage.getItem('todos') !== null;
+        const savedTodos = savedTodosExist ? JSON.parse(localStorage.getItem('todos')) : [];
+
+        console.log(savedTodos);
+
+        this.setState({ todos: savedTodos });
+    }
+
+    updateLocalStorage = () => {
+        localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    };
+
     addTodo = todo => {
-        this.setState({
-            todos: [...this.state.todos, todo]
-        });
+        this.setState(
+            {
+                todos: [...this.state.todos, todo]
+            },
+            () => {
+                this.updateLocalStorage();
+            }
+        );
     };
 
     toggleCompleted = id => {
-        this.setState({
-            todos: this.state.todos.map(todo => {
-                if (todo.id === id) {
-                    return { ...todo, completed: !todo.completed };
-                } else {
-                    return todo;
-                }
-            })
-        });
+        this.setState(
+            {
+                todos: this.state.todos.map(todo => {
+                    if (todo.id === id) {
+                        return { ...todo, completed: !todo.completed };
+                    } else {
+                        return todo;
+                    }
+                })
+            },
+            () => {
+                this.updateLocalStorage();
+            }
+        );
     };
 
     clearCompleted = () => {
-        this.setState({ todos: this.state.todos.filter(todo => todo.completed === false) });
+        this.setState({ todos: this.state.todos.filter(todo => todo.completed === false) }, () => {
+            this.updateLocalStorage();
+        });
     };
 
     render() {
