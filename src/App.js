@@ -29,7 +29,17 @@ class App extends React.Component {
         });
     };
 
-    toggleCompleted = () => {};
+    toggleCompleted = id => {
+        this.setState({
+            todos: this.state.todos.map(todo => {
+                if (todo.id === id) {
+                    return { ...todo, completed: !todo.completed };
+                } else {
+                    return todo;
+                }
+            })
+        });
+    };
 
     clearCompleted = () => {
         this.setState({ todos: this.state.todos.filter(todo => todo.completed === false) });
@@ -39,7 +49,7 @@ class App extends React.Component {
         return (
             <div>
                 <TodoForm addTodo={this.addTodo} clearCompleted={this.clearCompleted} />
-                <TodoList todos={this.state.todos} />
+                <TodoList todos={this.state.todos} toggleCompleted={this.toggleCompleted} />
             </div>
         );
     }

@@ -8,7 +8,7 @@ class TodoList extends Component {
     }
 
     render() {
-        return this.props.todos.map(todo => <Todo key={todo.id} todo={todo} />);
+        return this.props.todos.map(todo => <Todo key={todo.id} todo={todo} toggleCompleted={this.props.toggleCompleted} />);
     }
 }
 
